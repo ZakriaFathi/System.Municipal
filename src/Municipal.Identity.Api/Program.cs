@@ -1,4 +1,4 @@
-using Municipal.DataAccess.Extensions;
+using Municipal.Identity.Api.Extensions;
 using Municipal.Utils.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

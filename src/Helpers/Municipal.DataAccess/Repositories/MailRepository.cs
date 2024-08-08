@@ -4,8 +4,8 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
-using Municipal.Application.Legacy.Abstracts;
-using Municipal.Application.Legacy.Features.Email;
+using Municipal.Application.Identity.Abstracts;
+using Municipal.Application.Identity.Features.Email;
 using Municipal.Utils.Options;
 namespace Municipal.DataAccess.Repositories;
 

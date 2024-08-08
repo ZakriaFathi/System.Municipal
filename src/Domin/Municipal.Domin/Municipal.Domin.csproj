@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Municipal.Utils\Municipal.Utils.csproj" />
   </ItemGroup>
-
-
+  
 
 </Project>

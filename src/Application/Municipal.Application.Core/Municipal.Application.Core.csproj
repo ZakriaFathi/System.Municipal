@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Municipal.Application.Legacy\Municipal.Application.Legacy.csproj" />
+    <ProjectReference Include="..\..\Helpers\Municipal.Client\Municipal.Client.csproj" />
   </ItemGroup>
-
-
+  
+  
 
 </Project>

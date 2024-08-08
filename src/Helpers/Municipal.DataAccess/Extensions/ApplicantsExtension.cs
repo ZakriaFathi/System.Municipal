@@ -26,6 +26,12 @@ public static class ApplicantsExtension
         if (!string.IsNullOrEmpty(ucdConnectionString))
             services.AddDbContextPool<FormsDbContext>(options => options.UseSqlServer(blackListConnectionString)
                 .EnableDetailedErrors()
+                .EnableSensitiveDataLogging()); 
+        
+        var NewsConnectionString = configuration.GetConnectionString("NewsDb");
+        if (!string.IsNullOrEmpty(ucdConnectionString))
+            services.AddDbContextPool<NewsDbContext>(options => options.UseSqlServer(NewsConnectionString)
+                .EnableDetailedErrors()
                 .EnableSensitiveDataLogging());
 
 

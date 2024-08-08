@@ -9,6 +9,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domin\Municipal.Domin\Municipal.Domin.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\News\Comments\Queries\" />
+    <Folder Include="Features\News\Liks\Queries\" />
+  </ItemGroup>
   
 
 

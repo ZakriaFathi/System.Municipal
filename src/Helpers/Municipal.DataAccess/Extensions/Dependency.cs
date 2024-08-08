@@ -7,6 +7,7 @@ using Municipal.Client.IdentityClient.Repository;
 using Municipal.Consumers.Extensions;
 using Municipal.DataAccess.Repositories;
 using Municipal.DataAccess.Repositories.FormRepo;
+using Municipal.DataAccess.Repositories.NewsRepo;
 using Municipal.DataAccess.Repositories.OrderRepo;
 using Municipal.DataAccess.Repositories.UserManageRepo;
 using Municipal.Utils.Options;
@@ -32,6 +33,7 @@ public static class Dependency
         services.AddTransient<IOrdersRepository, OrderRepository>();
         services.AddTransient<IIdentityClientApi, IdentityServices>();
         services.AddTransient<IRequestRepository, RequestRepository>();
+        services.AddTransient<INewsRepository, NewsRepository>();
         services.AddHttpClient<IdentityClient>();
   
     }

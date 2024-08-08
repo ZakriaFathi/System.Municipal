@@ -116,7 +116,6 @@ public class UserManageRepository : IUserManagmentRepository
                 UserType = createUserDto.UserType,
                 Password = createUserDto.Password,
                 ActivateState = ActivateState.InActive,
-                CreatedBy = createUserDto.CreatedBy
             };
             var userKyc = new UserKyc()
             {

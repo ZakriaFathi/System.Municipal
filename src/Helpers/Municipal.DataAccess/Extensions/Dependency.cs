@@ -1,8 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Municipal.Application.Core.Abstracts;
 using Municipal.Application.Legacy.Abstracts;
 using Municipal.Client.IdentityClient;
 using Municipal.Client.IdentityClient.Repository;
+using Municipal.Consumers.Extensions;
+using Municipal.DataAccess.Repositories;
 using Municipal.DataAccess.Repositories.FormRepo;
 using Municipal.DataAccess.Repositories.OrderRepo;
 using Municipal.DataAccess.Repositories.UserManageRepo;
@@ -19,6 +22,8 @@ public static class Dependency
 
         var connectivityOptions = config!.GetSection("ComponentConnectivityOptions");
         services.Configure<ComponentConnectivityOptions>(connectivityOptions);
+
+        services.AddDbServices();
         
         services.AddTransient<IUserManagmentRepository, UserManageRepository>();
         services.AddTransient<IPermissionsRepository, PermissionsRepository>();
@@ -26,6 +31,7 @@ public static class Dependency
         services.AddTransient<IFormRepository, FormRepository>();
         services.AddTransient<IOrdersRepository, OrderRepository>();
         services.AddTransient<IIdentityClientApi, IdentityServices>();
+        services.AddTransient<IRequestRepository, RequestRepository>();
         services.AddHttpClient<IdentityClient>();
   
     }

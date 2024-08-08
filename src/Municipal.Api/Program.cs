@@ -1,3 +1,4 @@
+using Municipal.Api.Extensions;
 using Municipal.DataAccess.Extensions;
 using Municipal.Utils.Extensions;
 
@@ -11,6 +12,8 @@ builder.Services.AddSwaggerView();
 
 builder.Services.AddDbContext(builder.Configuration); 
 builder.Services.AddDependency();
+builder.AddMassTransitConsumerServices();
+
 
 var app = builder.Build();
 

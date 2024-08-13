@@ -9,9 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerView();
-
-builder.Services.AddDbContext(builder.Configuration); 
-builder.Services.AddDependency();
+builder.Services.AddDependency(builder.Environment, builder.Configuration);
 builder.AddMassTransitConsumerServices();
 
 
@@ -24,9 +22,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.MapControllers();
+app.UseRouting();
+app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
 
 app.Run();

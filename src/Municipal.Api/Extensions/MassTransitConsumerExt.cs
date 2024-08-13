@@ -3,8 +3,8 @@
 using MassTransit;
 using Municipal.Consumers.Consumers;
 using Municipal.Consumers.Contracts;
-using Municipal.Consumers.Persistence;
 using Municipal.Consumers.Saga;
+using Municipal.DataAccess.Persistence;
 
 namespace Municipal.Api.Extensions;
 

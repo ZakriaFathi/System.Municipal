@@ -30,13 +30,13 @@ public class FormRepository : IFormRepository
                 FormId = x.Id,
                 Name = x.Name,
                 FormType = x.FormType
-            }).ToListAsync(cancellationToken: cancellationToken);
+            }).ToListAsync(cancellationToken);
         return form;
     }
 
     public async Task<Result<GetFormResponse>> GetFormByName(GetFormByNameRequest request, CancellationToken cancellationToken)
     {
-        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken: cancellationToken);
+        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
         if (form is null)
             return Result.Fail( "هذا النموذج غير موجود" );
         
@@ -57,7 +57,7 @@ public class FormRepository : IFormRepository
         //if (result1.IsValid == false)
         //    return Result<string>.UnValid(new List<string>() { result1.Errors[0].ErrorMessage });
         
-        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken: cancellationToken);
+        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
         if(form != null)
             return Result.Fail("هذا النموذج موجود");
         
@@ -81,7 +81,7 @@ public class FormRepository : IFormRepository
         //if (result.IsValid == false)
         //    return Result<string>.UnValid(new List<string>() { result.Errors[0].ErrorMessage });
         
-        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Id == request.FormId, cancellationToken: cancellationToken);
+        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Id == request.FormId, cancellationToken);
         if(form == null)
             return Result.Fail("هذا النموذج غير موجود");
         
@@ -95,7 +95,7 @@ public class FormRepository : IFormRepository
 
     public async Task<Result<string>> DeleteForm(DeleteFormRequest request, CancellationToken cancellationToken)
     {
-        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+        var form = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         if (form is null)
             return Result.Fail("هذا النموذج غير موجود");
 
@@ -114,7 +114,7 @@ public class FormRepository : IFormRepository
                 FormId = x.Id,
                 Name = x.Name,
                 FormType = x.FormType
-            }).ToListAsync(cancellationToken: cancellationToken);
+            }).ToListAsync(cancellationToken);
 
         if (form.Count <= 0)
             return Result.Fail("هذا النموذج غير موجود");

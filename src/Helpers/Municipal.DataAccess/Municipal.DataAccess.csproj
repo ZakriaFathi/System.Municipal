@@ -8,9 +8,9 @@
 	
 	<ItemGroup>
     <ProjectReference Include="..\..\Application\Municipal.Application.Core\Municipal.Application.Core.csproj" />
-    <ProjectReference Include="..\..\Application\Municipal.Application.Identity\Municipal.Application.Identity.csproj" />
     <ProjectReference Include="..\..\Host\Municipal.Consumers\Municipal.Consumers.csproj" />
   </ItemGroup>
+  
   
   
 </Project>

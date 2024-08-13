@@ -28,21 +28,21 @@ public static class ApplicantsExtension
                 .EnableDetailedErrors()
                 .EnableSensitiveDataLogging()); 
         
-        var NewsConnectionString = configuration.GetConnectionString("NewsDb");
+        var newsConnectionString = configuration.GetConnectionString("NewsDb");
         if (!string.IsNullOrEmpty(ucdConnectionString))
-            services.AddDbContextPool<NewsDbContext>(options => options.UseSqlServer(NewsConnectionString)
+            services.AddDbContextPool<NewsDbContext>(options => options.UseSqlServer(newsConnectionString)
                 .EnableDetailedErrors()
                 .EnableSensitiveDataLogging());
 
 
 
-        // var requestStatesConnectionString = configuration.GetConnectionString("RequestStatesDb");
-        // if (!string.IsNullOrEmpty(ucdConnectionString))
-        //     services.AddDbContextPool<RequestsStatesDb>(options => options.UseSqlServer(requestStatesConnectionString)
-        //         .EnableDetailedErrors()
-        //         .EnableSensitiveDataLogging()); 
-        // using var provider = services.BuildServiceProvider();
-        // provider.GetService<RequestsStatesDb>()?.Database.Migrate();
+        var requestStatesConnectionString = configuration.GetConnectionString("RequestStatesDb");
+        if (!string.IsNullOrEmpty(ucdConnectionString))
+            services.AddDbContextPool<RequestsStatesDb>(options => options.UseSqlServer(requestStatesConnectionString)
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging()); 
+        using var provider = services.BuildServiceProvider();
+        provider.GetService<RequestsStatesDb>()?.Database.Migrate();
 
 
     }

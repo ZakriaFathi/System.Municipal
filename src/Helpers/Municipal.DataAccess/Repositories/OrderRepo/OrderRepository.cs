@@ -33,14 +33,14 @@ public class OrderRepository : IOrdersRepository
                 Id = x.Id,
                 OrderState = x.OrderState,
                 UserName = x.UserName,
-            }).ToListAsync();
+            }).ToListAsync(cancellationToken: cancellationToken);
         
         return orders;
     }
 
     public async Task<Result<GetOrderResponse>> GetById(GetOrderRequest request, CancellationToken cancellationToken)
     {
-        var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == request.OrderId);
+        var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == request.OrderId, cancellationToken);
         if (order is null)
             return Result.Fail("هذا الطلب غير موجود" );
 

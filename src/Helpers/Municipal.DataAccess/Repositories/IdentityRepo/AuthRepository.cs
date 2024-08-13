@@ -2,16 +2,16 @@ using FluentResults;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Municipal.Application.Identity.Abstracts;
 using Municipal.Application.Identity.Contracts;
-using Municipal.Application.Identity.Features.Auth.Commands.ForgotPassword;
-using Municipal.Application.Identity.Features.Auth.Commands.RefreshToken;
-using Municipal.Application.Identity.Features.Auth.Commands.ResetPassword;
-using Municipal.Application.Identity.Features.Auth.Commands.SingIn;
-using Municipal.Application.Identity.Features.Auth.Commands.SingInOtp;
-using Municipal.Application.Identity.Features.Auth.Commands.SingUp;
-using Municipal.Application.Identity.Features.Auth.Responses;
-using Municipal.Application.Identity.Features.Email;
+using Municipal.Application.Legacy.Abstracts;
+using Municipal.Application.Legacy.Features.Identity.Auth.Commands.ForgotPassword;
+using Municipal.Application.Legacy.Features.Identity.Auth.Commands.RefreshToken;
+using Municipal.Application.Legacy.Features.Identity.Auth.Commands.ResetPassword;
+using Municipal.Application.Legacy.Features.Identity.Auth.Commands.SingIn;
+using Municipal.Application.Legacy.Features.Identity.Auth.Commands.SingInOtp;
+using Municipal.Application.Legacy.Features.Identity.Auth.Commands.SingUp;
+using Municipal.Application.Legacy.Features.Identity.Auth.Responses;
+using Municipal.Application.Legacy.Features.Identity.Email;
 using Municipal.Domin.Models;
 using Municipal.Utils.Enums;
 using Municipal.Utils.Options;
@@ -83,49 +83,46 @@ public class AuthRepository : IAuthRepository
         if (user.ActivateState == ActivateState.InActive)
             return Result.Fail(new List<string>() { "هذا المستخدم غير مفعل" });
 
-        using (var client = new HttpClient())
+        using var client = new HttpClient();
+        var disco = await client.GetDiscoveryDocumentAsync(_clientSettings.Url, cancellationToken);
+        var tokenResponse = await client.RequestTokenAsync(new TokenRequest
         {
-            var disco = await client.GetDiscoveryDocumentAsync(_clientSettings.Url);
-            //var disco = "http://172.20.10.3:8888/connect/token";
-            var tokenResponse = await client.RequestTokenAsync(new TokenRequest
+            Address = disco.TokenEndpoint,
+            GrantType = IdConstants.GrantType.UserCredentials,
+            ClientId = _clientSettings.ClientId[1],
+            ClientSecret = _clientSettings.ClientSecrets,
+            Parameters =
             {
-                Address = disco.TokenEndpoint,
-                GrantType = IdConstants.GrantType.UserCredentials,
-                ClientId = _clientSettings.ClientId[1],
-                ClientSecret = _clientSettings.ClientSecrets,
-                Parameters =
-                    {
-                        {"userName", command.UserName },
-                        {"password", command.Password },
-                        {"Scope", _clientSettings.Scopes[1]},
-                    }
-            });
-            var response = new AccessTokenRsponse()
-            {
-                Access_token = tokenResponse.AccessToken,
-                Expires_in = tokenResponse.ExpiresIn,
-                Token_type = tokenResponse.TokenType,
-                Scope = tokenResponse.Scope,
-            };
-            if (response.Access_token == null)
-                return Result.Fail("حدثت مشكلة بالخادم الرجاء الاتصال بالدعم الفني");
+                {"userName", command.UserName },
+                {"password", command.Password },
+                {"Scope", _clientSettings.Scopes[1]},
+            }
+        }, cancellationToken);
+        var response = new AccessTokenRsponse()
+        {
+            Access_token = tokenResponse.AccessToken,
+            Expires_in = tokenResponse.ExpiresIn,
+            Token_type = tokenResponse.TokenType,
+            Scope = tokenResponse.Scope,
+        };
+        if (response.Access_token == null)
+            return Result.Fail("حدثت مشكلة بالخادم الرجاء الاتصال بالدعم الفني");
 
-            //if (user.TwoFactorEnabled)
-            //{
-            //    await _signInManager.SignOutAsync();
-            //    await _signInManager.PasswordSignInAsync(user, request.Password, false, true);
-            //    var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+        //if (user.TwoFactorEnabled)
+        //{
+        //    await _signInManager.SignOutAsync();
+        //    await _signInManager.PasswordSignInAsync(user, request.Password, false, true);
+        //    var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
-            //    var message = new SendEmailRequest
-            //    {
-            //        Subject = "رمز المصادقة",
-            //        ToEmail = user.Email,
-            //        html = $" {token} This code is for two-factor authentication "
-            //    };
-            //    await _emailSender.SendEmailAsync(message);
-            //}
-            return response;
-        }
+        //    var message = new SendEmailRequest
+        //    {
+        //        Subject = "رمز المصادقة",
+        //        ToEmail = user.Email,
+        //        html = $" {token} This code is for two-factor authentication "
+        //    };
+        //    await _emailSender.SendEmailAsync(message);
+        //}
+        return response;
     }
     public async Task<Result<AccessTokenRsponse>> SingInOtp(SingInOtpCommand command, CancellationToken cancellationToken)
     {
@@ -138,7 +135,7 @@ public class AuthRepository : IAuthRepository
 
         using (var client = new HttpClient())
         {
-            var disco = await client.GetDiscoveryDocumentAsync(_clientSettings.Url);
+            var disco = await client.GetDiscoveryDocumentAsync(_clientSettings.Url, cancellationToken);
             var tokenResponse = await client.RequestTokenAsync(new TokenRequest
             {
                 Address = disco.TokenEndpoint,
@@ -151,7 +148,7 @@ public class AuthRepository : IAuthRepository
                         {"UserName", twoFactor.UserName },
                         {"Scope", $"{_clientSettings.Scopes[0]} {_clientSettings.Scopes[2]}"},
                     }
-            });
+            }, cancellationToken);
             var response = new AccessTokenRsponse()
             {
                 Access_token = tokenResponse.AccessToken,
@@ -170,7 +167,7 @@ public class AuthRepository : IAuthRepository
         {
             using (var client = new HttpClient())
             {
-                var disco = await client.GetDiscoveryDocumentAsync(_clientSettings.Url);
+                var disco = await client.GetDiscoveryDocumentAsync(_clientSettings.Url, cancellationToken);
 
                 var tokenResponse = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
                 {
@@ -178,7 +175,7 @@ public class AuthRepository : IAuthRepository
                     ClientId = _clientSettings.ClientId[1],
                     ClientSecret = _clientSettings.ClientSecrets,
                     RefreshToken = command.RefreshToken
-                });
+                }, cancellationToken);
 
                 var response = new RefreshTokenRsponse()
                 {
@@ -186,8 +183,8 @@ public class AuthRepository : IAuthRepository
                 };
                 if (response.Access_token == null)
                     return Result.Fail("حدثت مشكلة بالخادم الرجاء الاتصال بالدعم الفني" );
-
-                    return response;
+                
+                return response;
             } 
         }
     public async Task<Result<string>> SingUp(SingUpCommand command, CancellationToken cancellationToken)

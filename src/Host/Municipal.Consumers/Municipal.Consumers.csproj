@@ -18,5 +18,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Municipal.Application.Legacy\Municipal.Application.Legacy.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Persistence\Migrations\" />
+  </ItemGroup>
   
 </Project>

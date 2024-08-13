@@ -23,7 +23,7 @@ public class RoleRepository : IRoleRepository
         {
             Id = x.Id,
             Name = x.Name
-        }).ToListAsync();
+        }).ToListAsync(cancellationToken: cancellationToken);
 
         return roles;
     }
@@ -33,11 +33,12 @@ public class RoleRepository : IRoleRepository
         var roles = await _userManagementDb.UserPermissions
             .Include(up => up.Permission)
             .ThenInclude(p => p.Role)
-            .Where(up => up.UserId == request.UserId).Select(x => new GetRolesResponse()
+            .Where(up => up.UserId == request.UserId)
+            .Select(x => new GetRolesResponse()
             {
                 Id = x.Permission.Role.Id,
                 Name = x.Permission.Role.Name
-            }).Distinct().ToListAsync();
+            }).Distinct().ToListAsync( cancellationToken);
 
         return roles;
     }

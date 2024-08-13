@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Identity\" />
     <Folder Include="Features\News\Comments\Queries\" />
     <Folder Include="Features\News\Liks\Queries\" />
   </ItemGroup>

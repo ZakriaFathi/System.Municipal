@@ -51,7 +51,7 @@ public class UpdateUsers
 
         return new UpdateUsers()
         {
-            UserId = updateUserDto.Id.ToString(),
+            UserId = updateUserDto.UserId.ToString(),
             PhoneNumber = updateUserDto.PhoneNumber,
             Email = updateUserDto.Email,
             Address = updateUserDto.Address,

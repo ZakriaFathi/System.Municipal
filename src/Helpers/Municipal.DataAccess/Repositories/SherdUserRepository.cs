@@ -69,6 +69,8 @@ public class SherdUserRepository : ISherdUserRepository
             UserName = command.UserName,
             UserType = command.UserType,
             ActivateState = command.ActivateState,
+            TwoFactorEnabled = true,
+            EmailConfirmed = true
         };
         
         if (command.Password.Length <= 7)

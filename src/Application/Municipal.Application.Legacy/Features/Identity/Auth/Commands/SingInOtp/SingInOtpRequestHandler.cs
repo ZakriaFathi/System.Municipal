@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Municipal.Application.Identity.Contracts;
 using Municipal.Application.Legacy.Abstracts;
 using Municipal.Application.Legacy.Features.Identity.Auth.Responses;
 using Municipal.Utils.Endpoints;
@@ -16,6 +18,7 @@ public class SingInOtpRequestHandler : EndpointBase.WithRequestWithResult<SingIn
         _authService = authService;
     }
     [HttpPost("api/Auth/SingInOtp")]
+    [Authorize(PolicyAuthorize.SingIn)]
     [SwaggerOperation(
         Summary = "",
         Description = "",

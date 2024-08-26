@@ -108,20 +108,20 @@ public class AuthRepository : IAuthRepository
         if (response.Access_token == null)
             return Result.Fail("حدثت مشكلة بالخادم الرجاء الاتصال بالدعم الفني");
 
-        //if (user.TwoFactorEnabled)
-        //{
-        //    await _signInManager.SignOutAsync();
-        //    await _signInManager.PasswordSignInAsync(user, request.Password, false, true);
-        //    var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+        if (user.TwoFactorEnabled)
+        {
+            await _signInManager.SignOutAsync();
+            await _signInManager.PasswordSignInAsync(user, command.Password, false, true);
+            var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
-        //    var message = new SendEmailRequest
-        //    {
-        //        Subject = "رمز المصادقة",
-        //        ToEmail = user.Email,
-        //        html = $" {token} This code is for two-factor authentication "
-        //    };
-        //    await _emailSender.SendEmailAsync(message);
-        //}
+            var message = new SendEmailRequest
+            {
+                Subject = "رمز المصادقة",
+                ToEmail = user.Email,
+                html = $" {token} This code is for two-factor authentication "
+            };
+            await _emailSender.SendEmailAsync(message);
+        }
         return response;
     }
     public async Task<Result<AccessTokenRsponse>> SingInOtp(SingInOtpCommand command, CancellationToken cancellationToken)
@@ -145,7 +145,7 @@ public class AuthRepository : IAuthRepository
                 Parameters =
                     {
                         {"Otp", command.Otp },
-                        {"UserName", twoFactor.UserName },
+                        {"UserName", twoFactor?.UserName },
                         {"Scope", $"{_clientSettings.Scopes[0]} {_clientSettings.Scopes[2]}"},
                     }
             }, cancellationToken);
@@ -191,8 +191,7 @@ public class AuthRepository : IAuthRepository
     {
         if (await _userManager.FindByNameAsync(command.UserName) is not null)
             return Result.Fail(new List<string>() { "اسم المستخدم موجود مسبقا" });
-
-
+        
         var user = new AppUser
         {
             FirstName = command.FirstName,
@@ -220,13 +219,14 @@ public class AuthRepository : IAuthRepository
         if (command.Password.Length <= 7)
             return Result.Fail(new List<string>{ "كلمة المرور اقل من 8 " });
 
-        //var message = new SendEmailRequest
-        //{
-        //    Subject = "إنشاء حساب",
-        //    ToEmail = user.Email,
-        //    html = $" تم إنشاء حساب بالفعل يمكنك استعمال هذا البريد بما يسمح لك باجراء العمليات المخصصه "
-        //};
-        //await _emailSender.SendEmailAsync(message);
+        var message = new SendEmailRequest
+        {
+            Subject = "إنشاء حساب",
+            ToEmail = user.Email,
+            html = $" تم إنشاء حساب بالفعل يمكنك استعمال هذا البريد الالكتروني بما يسمح لك باجراء العمليات المخصصه "
+        };
+        await _emailSender.SendEmailAsync(message);
+        
         return user.Id;
     }
 }

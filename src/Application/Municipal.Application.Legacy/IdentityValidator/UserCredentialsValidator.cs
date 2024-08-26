@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Municipal.Application.Identity.Contracts;
 using Municipal.Domin.Models;
 
-namespace Municipal.Application.Identity.IdentityValidator;
+namespace Municipal.Application.Legacy.IdentityValidator;
 
 public class UserCredentialsValidator : IExtensionGrantValidator
     {

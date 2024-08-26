@@ -27,6 +27,9 @@ public static class Dependency
         
         services.IdentityServer(environment, configuration);
         services.AddDbContext(configuration); 
+        services.AddAuthentications(configuration);
+        services.AddHttpContextAccessor();
+
 
         services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
         services.Configure<ClientSettings>(configuration.GetSection("ClientSettings"));

@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Municipal.Application.Identity.Configurations;
-using Municipal.Application.Identity.IdentityValidator;
+using Municipal.Application.Legacy.Configurations;
+using Municipal.Application.Legacy.IdentityValidator;
 using Municipal.DataAccess.Persistence;
 using Municipal.Domin.Models;
 namespace Municipal.DataAccess.Extensions;
@@ -50,10 +50,10 @@ public static class IdentityExtension
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
-            .AddInMemoryClients(IdentityConfiguration.Clients)
-            .AddInMemoryIdentityResources(IdentityConfiguration.IdentityResources)
-            .AddInMemoryApiResources(IdentityConfiguration.ApiResources)
-            .AddInMemoryApiScopes(IdentityConfiguration.ApiScopes)
+            .AddInMemoryClients(IdentityConfiguration.GetClients(configuration))
+            .AddInMemoryIdentityResources(IdentityConfiguration.GetIdentityResources())
+            .AddInMemoryApiResources(IdentityConfiguration.GetApiResources())
+            .AddInMemoryApiScopes(IdentityConfiguration.GetApiScopes())
             .AddAspNetIdentity<AppUser>()
             .AddCustomTokenRequestValidator<RegistrationResponse>()
             //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()

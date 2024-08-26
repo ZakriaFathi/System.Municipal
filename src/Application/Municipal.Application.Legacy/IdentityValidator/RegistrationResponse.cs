@@ -1,6 +1,6 @@
 using IdentityServer4.Validation;
 
-namespace Municipal.Application.Identity.IdentityValidator;
+namespace Municipal.Application.Legacy.IdentityValidator;
 
 public class RegistrationResponse : ICustomTokenRequestValidator
 {

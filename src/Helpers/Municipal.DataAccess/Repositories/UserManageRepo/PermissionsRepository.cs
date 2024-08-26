@@ -2,9 +2,11 @@ using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Municipal.Application.Legacy.Abstracts;
 using Municipal.Application.Legacy.Features.UserManagement.Permissions;
+using Municipal.Application.Legacy.Features.UserManagement.Permissions.Commands.CreatePermission;
 using Municipal.Application.Legacy.Features.UserManagement.Permissions.Queries.GetAllPermissions;
 using Municipal.Application.Legacy.Features.UserManagement.Permissions.Queries.GetPermissionsByRoleId;
 using Municipal.DataAccess.Persistence;
+using Municipal.Domin.Entities;
 
 namespace Municipal.DataAccess.Repositories.UserManageRepo;
 
@@ -76,5 +78,22 @@ public class PermissionsRepository : IPermissionsRepository
 
         return Result.Ok();
 
+    }
+
+    public async Task<Result<string>> CreatePermission(CreatePermissionRequest request, CancellationToken cancellationToken)
+    {
+        var permission = await _userManagementDbContext.Permissions.FirstOrDefaultAsync(x=>x.RoleId == request.RoleId, cancellationToken);
+        if (permission != null)
+            return Result.Fail("هذي الصلاحية موجودة");    
+        
+        permission = new Permission
+        {
+            Name = request.PermissionName,
+            RoleId = request.RoleId
+        };
+        _userManagementDbContext.Permissions.Add(permission);
+        await _userManagementDbContext.SaveChangesAsync(cancellationToken);
+        
+        return "تم الاضافة";
     }
 }

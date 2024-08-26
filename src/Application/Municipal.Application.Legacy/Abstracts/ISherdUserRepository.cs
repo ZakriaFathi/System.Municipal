@@ -1,12 +1,4 @@
 using FluentResults;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.ChangePassword;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.ChangeUserActivation;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.CreateUser;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.CreateUserPermissions;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.UpdateUser;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.UpdateUserKyc;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.UpdateUserPermissions;
-using Municipal.Application.Legacy.Features.UserManagement.Users.Commands.UpdateUserProfile;
 using Municipal.Application.Legacy.Models.IdentityModel;
 using Municipal.Application.Legacy.Models.UserManagement;
 using Municipal.Domin.Entities;

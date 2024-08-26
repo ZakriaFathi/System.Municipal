@@ -1,25 +1,35 @@
 using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 using Municipal.Application.Identity.Contracts;
 
-namespace Municipal.Application.Identity.Configurations;
+namespace Municipal.Application.Legacy.Configurations;
 
-public class IdentityConfiguration
-    {
-        public static IEnumerable<IdentityResource> IdentityResources =>
-                new IdentityResource[] { };
+public static class IdentityConfiguration
+    { 
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>()
+            {
+            };
+        }
 
-        public static IEnumerable<ApiScope> ApiScopes =>
-            new[] {
+        public static IEnumerable<ApiScope> GetApiScopes()
+        {
+            return new List<ApiScope>()
+            {
                 new ApiScope(IdConstants.Scopes.UserName) { },
                 new ApiScope(IdConstants.Scopes.OtpScope)
                 {
                     UserClaims = TokenClamis.AddClaims(),
                 },
             };
-        public static IEnumerable<ApiResource> ApiResources =>
-            new[]
+        }
+        
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>
             {
-                new ApiResource("SystemMunicipal")
+                new ApiResource("System.Municipal")
                 {
                     Scopes = new List<string>
                     {
@@ -28,15 +38,17 @@ public class IdentityConfiguration
                     },
                 }
             };
-
-        public static IEnumerable<Client> Clients =>
-            new[]
+        }
+        
+        public static IEnumerable<Client> GetClients(IConfiguration configuration)
+        {
+            return new List<Client>
             {
                 new Client
                 {
                     ClientId =IdConstants.Clients.Mobile,
                     AllowedGrantTypes =new[] { IdConstants.GrantType.UserCredentials, IdConstants.GrantType.Otp},
-                    ClientSecrets = { new Secret("094DF16441FE481D9C4E06AA3BE5E92D800B71249740=4162A5AF64631ABE43A0".Sha256()) },
+                    ClientSecrets = { new Secret(configuration["ClientSettings:ClientSecrets"].Sha256()) },
                     AllowOfflineAccess = true,
                     AccessTokenType = AccessTokenType.Jwt,
                     AccessTokenLifetime = 3600,
@@ -51,6 +63,7 @@ public class IdentityConfiguration
                         IdConstants.Scopes.OtpScope,
                         IdConstants.Scopes.UserName
                     }
-                },
+                }
             };
+        }
     }

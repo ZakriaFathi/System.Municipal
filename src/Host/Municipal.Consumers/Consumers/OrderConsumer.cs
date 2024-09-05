@@ -17,26 +17,30 @@ public class OrderConsumer :
     protected override async Task ConsumeMessage(ConsumeContext<OrderContract> context)
     {
         var message = context.Message;
-        
-        var result = await _ordersRepository.CreateOrder(message.CreateOrderRequest, cancellationToken: CancellationToken.None);    
-        
-        if (result.IsSuccess)
-        {
 
-            await context.Publish(new ServiceActivated
+        var result =
+            await OrdersRepository.CreateOrder(message.CreateOrderRequest, cancellationToken: CancellationToken.None);
+
+
+        if (!result.IsSuccess)
+        {
+            await context.Publish(new ServiceFailed
             {
                 RequestId = message.RequestId,
-                CreateOrderRequest = message.CreateOrderRequest,
-                FormType = message.FormType
+                ResponseMessage = result.Errors[0].ToString()
+
             });
+
             return;
+
         }
 
-        await context.Publish(new ServiceFailed
+        await context.Publish(new ServiceActivated
         {
             RequestId = message.RequestId,
-            ResponseMessage = result.Errors[0].ToString()
-
+            Email = message.CreateOrderRequest.EmailAddress,
+            ResponseMessage = "Success",
         });
+
     }
 }

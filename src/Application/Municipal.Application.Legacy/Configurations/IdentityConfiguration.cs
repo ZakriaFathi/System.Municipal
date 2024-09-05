@@ -1,11 +1,13 @@
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using Municipal.Application.Identity.Contracts;
+using Municipal.Utils.Options;
 
 namespace Municipal.Application.Legacy.Configurations;
 
 public static class IdentityConfiguration
     { 
+        
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>()

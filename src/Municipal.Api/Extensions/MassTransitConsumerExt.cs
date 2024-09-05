@@ -54,6 +54,25 @@ public static class MassTransitConsumerExt
                     endpoint.Name = nameof(OrderContract);
                     
                 }); 
+                
+                busConfigurator.AddConsumer<NotificationConsumer>(
+                    consumerConfig =>
+                    {
+                        consumerConfig.UseMessageRetry(opt => opt.Interval(3, new TimeSpan(0, 1, 0)));
+                        consumerConfig.UseDelayedRedelivery(cb => cb.Interval(3, new TimeSpan(0, 0, 30)));
+
+                        consumerConfig.UseCircuitBreaker(config =>
+                        {
+                            config.TripThreshold = 15;
+                            config.ActiveThreshold = 5;
+                            config.ResetInterval = TimeSpan.FromSeconds(30);
+                        });
+                    }).Endpoint(endpoint =>
+                {
+                    endpoint.PrefetchCount = mqOptions.PrefetchCount;
+                    endpoint.ConcurrentMessageLimit = mqOptions.ConcurrentMessageLimit;
+                    endpoint.Name = nameof(NotificationContract);
+                });
 
 
                 busConfigurator.AddHealthChecks();
@@ -73,6 +92,7 @@ public static class MassTransitConsumerExt
 
                     busFactoryConfigurator.ConfigureEndpoints(context);
                 });
+                
                 
             });
             });

@@ -10,3 +10,12 @@ public class OrderContract
     public FormType FormType { get; set; }
 
 }
+
+public class NotificationContract
+{
+    public Guid RequestId {get; set;}
+    public string? ToEmail { get; set; }
+    public string Subject { get; set; }
+    public string html { get; set; }
+
+}

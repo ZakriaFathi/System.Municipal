@@ -16,12 +16,12 @@ public class RetryOptions
 public abstract class BaseConsumer<T> : IConsumer<T> where T : class
 {
     private readonly RetryOptions _retryOptions;
-    protected readonly IOrdersRepository _ordersRepository;
+    protected readonly IOrdersRepository OrdersRepository;
 
 
     protected BaseConsumer(IOptions<RetryOptions> retryOptions, IOrdersRepository ordersRepository)
     {
-        _ordersRepository = ordersRepository;
+        OrdersRepository = ordersRepository;
         _retryOptions = retryOptions.Value;
     }
 
